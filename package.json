@@ -2,15 +2,16 @@
   "name": "directives",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "scripts": {
     "generate": "graphql get-schema -p database",
     "generate:watch": "nodemon -e graphql --exec 'npm run generate'",
+    "deploy:generate": "run-s -l deploy generate:watch",
+    "deploy": "cd database && prisma deploy",
     "dev": "run-p -l generate:watch start playground",
-    "start": "ts-node index.ts",
+    "start": "ts-node src/index.ts",
     "debug": "dotenv -- nodemon -e ts,graphql -x ts-node --inspect src/index.ts",
     "playground": "graphql playground",
     "build": "rimraf dist && tsc"

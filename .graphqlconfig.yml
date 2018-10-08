@@ -6,4 +6,4 @@ projects:
   database:
     schemaPath: generated/prisma.graphql
     extensions:
-      prisma: prisma.yml
+      prisma: database/prisma.yml

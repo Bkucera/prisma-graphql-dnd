@@ -1,5 +1,9 @@
 # source: http://localhost:4466
-# timestamp: Sun Sep 30 2018 20:05:00 GMT-0400 (EDT)
+# timestamp: Mon Oct 08 2018 12:36:32 GMT-0400 (Eastern Daylight Time)
+
+type AggregatePost {
+  count: Int!
+}
 
 type AggregateUser {
   count: Int!
@@ -20,11 +24,17 @@ scalar Long
 
 type Mutation {
   createUser(data: UserCreateInput!): User!
+  createPost(data: PostCreateInput!): Post!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   deleteUser(where: UserWhereUniqueInput!): User
+  deletePost(where: PostWhereUniqueInput!): Post
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
+  updateManyPosts(data: PostUpdateInput!, where: PostWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  deleteManyPosts(where: PostWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -54,10 +64,273 @@ type PageInfo {
   endCursor: String
 }
 
+type Post implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  likes(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
+  author(where: UserWhereInput): User!
+}
+
+"""A connection to a list of items."""
+type PostConnection {
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """A list of edges."""
+  edges: [PostEdge]!
+  aggregate: AggregatePost!
+}
+
+input PostCreateInput {
+  likes: UserCreateManyWithoutLikesInput
+  author: UserCreateOneWithoutPostsInput!
+}
+
+input PostCreateManyWithoutAuthorInput {
+  create: [PostCreateWithoutAuthorInput!]
+  connect: [PostWhereUniqueInput!]
+}
+
+input PostCreateManyWithoutLikesInput {
+  create: [PostCreateWithoutLikesInput!]
+  connect: [PostWhereUniqueInput!]
+}
+
+input PostCreateWithoutAuthorInput {
+  likes: UserCreateManyWithoutLikesInput
+}
+
+input PostCreateWithoutLikesInput {
+  author: UserCreateOneWithoutPostsInput!
+}
+
+"""An edge in a connection."""
+type PostEdge {
+  """The item at the end of the edge."""
+  node: Post!
+
+  """A cursor for use in pagination."""
+  cursor: String!
+}
+
+enum PostOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PostPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PostSubscriptionPayload {
+  mutation: MutationType!
+  node: Post
+  updatedFields: [String!]
+  previousValues: PostPreviousValues
+}
+
+input PostSubscriptionWhereInput {
+  """Logical AND on all given filters."""
+  AND: [PostSubscriptionWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [PostSubscriptionWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [PostSubscriptionWhereInput!]
+
+  """
+  The subscription event gets dispatched when it's listed in mutation_in
+  """
+  mutation_in: [MutationType!]
+
+  """
+  The subscription event gets only dispatched when one of the updated fields names is included in this list
+  """
+  updatedFields_contains: String
+
+  """
+  The subscription event gets only dispatched when all of the field names included in this list have been updated
+  """
+  updatedFields_contains_every: [String!]
+
+  """
+  The subscription event gets only dispatched when some of the field names included in this list have been updated
+  """
+  updatedFields_contains_some: [String!]
+  node: PostWhereInput
+}
+
+input PostUpdateInput {
+  likes: UserUpdateManyWithoutLikesInput
+  author: UserUpdateOneWithoutPostsInput
+}
+
+input PostUpdateManyWithoutAuthorInput {
+  create: [PostCreateWithoutAuthorInput!]
+  connect: [PostWhereUniqueInput!]
+  disconnect: [PostWhereUniqueInput!]
+  delete: [PostWhereUniqueInput!]
+  update: [PostUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [PostUpsertWithWhereUniqueWithoutAuthorInput!]
+}
+
+input PostUpdateManyWithoutLikesInput {
+  create: [PostCreateWithoutLikesInput!]
+  connect: [PostWhereUniqueInput!]
+  disconnect: [PostWhereUniqueInput!]
+  delete: [PostWhereUniqueInput!]
+  update: [PostUpdateWithWhereUniqueWithoutLikesInput!]
+  upsert: [PostUpsertWithWhereUniqueWithoutLikesInput!]
+}
+
+input PostUpdateWithoutAuthorDataInput {
+  likes: UserUpdateManyWithoutLikesInput
+}
+
+input PostUpdateWithoutLikesDataInput {
+  author: UserUpdateOneWithoutPostsInput
+}
+
+input PostUpdateWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput!
+  data: PostUpdateWithoutAuthorDataInput!
+}
+
+input PostUpdateWithWhereUniqueWithoutLikesInput {
+  where: PostWhereUniqueInput!
+  data: PostUpdateWithoutLikesDataInput!
+}
+
+input PostUpsertWithWhereUniqueWithoutAuthorInput {
+  where: PostWhereUniqueInput!
+  update: PostUpdateWithoutAuthorDataInput!
+  create: PostCreateWithoutAuthorInput!
+}
+
+input PostUpsertWithWhereUniqueWithoutLikesInput {
+  where: PostWhereUniqueInput!
+  update: PostUpdateWithoutLikesDataInput!
+  create: PostCreateWithoutLikesInput!
+}
+
+input PostWhereInput {
+  """Logical AND on all given filters."""
+  AND: [PostWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [PostWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [PostWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  likes_every: UserWhereInput
+  likes_some: UserWhereInput
+  likes_none: UserWhereInput
+  author: UserWhereInput
+}
+
+input PostWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   user(where: UserWhereUniqueInput!): User
+  post(where: PostWhereUniqueInput!): Post
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
 
   """Fetches an object given its ID"""
   node(
@@ -68,6 +341,7 @@ type Query {
 
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
 }
 
 type User implements Node {
@@ -76,6 +350,8 @@ type User implements Node {
   updatedAt: DateTime!
   email: String!
   password: String!
+  likes(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
 }
 
 """A connection to a list of items."""
@@ -91,6 +367,30 @@ type UserConnection {
 input UserCreateInput {
   email: String!
   password: String!
+  likes: PostCreateManyWithoutLikesInput
+  posts: PostCreateManyWithoutAuthorInput
+}
+
+input UserCreateManyWithoutLikesInput {
+  create: [UserCreateWithoutLikesInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateOneWithoutPostsInput {
+  create: UserCreateWithoutPostsInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutLikesInput {
+  email: String!
+  password: String!
+  posts: PostCreateManyWithoutAuthorInput
+}
+
+input UserCreateWithoutPostsInput {
+  email: String!
+  password: String!
+  likes: PostCreateManyWithoutLikesInput
 }
 
 """An edge in a connection."""
@@ -165,6 +465,53 @@ input UserSubscriptionWhereInput {
 input UserUpdateInput {
   email: String
   password: String
+  likes: PostUpdateManyWithoutLikesInput
+  posts: PostUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateManyWithoutLikesInput {
+  create: [UserCreateWithoutLikesInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  delete: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutLikesInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutLikesInput!]
+}
+
+input UserUpdateOneWithoutPostsInput {
+  create: UserCreateWithoutPostsInput
+  connect: UserWhereUniqueInput
+  delete: Boolean
+  update: UserUpdateWithoutPostsDataInput
+  upsert: UserUpsertWithoutPostsInput
+}
+
+input UserUpdateWithoutLikesDataInput {
+  email: String
+  password: String
+  posts: PostUpdateManyWithoutAuthorInput
+}
+
+input UserUpdateWithoutPostsDataInput {
+  email: String
+  password: String
+  likes: PostUpdateManyWithoutLikesInput
+}
+
+input UserUpdateWithWhereUniqueWithoutLikesInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutLikesDataInput!
+}
+
+input UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput!
+  create: UserCreateWithoutPostsInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutLikesInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutLikesDataInput!
+  create: UserCreateWithoutLikesInput!
 }
 
 input UserWhereInput {
@@ -340,6 +687,12 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
+  likes_every: PostWhereInput
+  likes_some: PostWhereInput
+  likes_none: PostWhereInput
+  posts_every: PostWhereInput
+  posts_some: PostWhereInput
+  posts_none: PostWhereInput
 }
 
 input UserWhereUniqueInput {

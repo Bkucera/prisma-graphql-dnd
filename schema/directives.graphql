@@ -1,3 +1,6 @@
 directive @userOwns(field: String) on FIELD | FIELD_DEFINITION
 directive @authenticated on FIELD | FIELD_DEFINITION
 directive @private on FIELD | FIELD_DEFINITION
+directive @unique on FIELD_DEFINITION
+directive @relation(name:String) on FIELD_DEFINITION
+directive @default(value:String) on FIELD_DEFINITION
