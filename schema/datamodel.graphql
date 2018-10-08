@@ -1,0 +1,19 @@
+
+# All types defined here will be fed through the Prisma generation process
+# Essentially, all of these types become database tables
+
+type User {
+    id: ID! @unique
+    createdAt: DateTime! 
+    updatedAt: DateTime! 
+    email: String! @unique @userOwns(field: "id")
+    password: String! @private
+    likes: [Post!]! @relation(name: "UserLikes")
+    posts: [Post!]! @relation(name: "UserPosts")
+}
+
+type Post {
+    id: ID! @unique
+    likes: [User!]! @relation(name: "UserLikes")
+    author: User! @relation(name: "UserPosts")
+}
