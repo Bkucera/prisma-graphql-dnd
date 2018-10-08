@@ -14,6 +14,8 @@ type User {
 
 type Post {
     id: ID! @unique
+    createdAt: DateTime!
+    updatedAt: DateTime!
     likes: [User!]! @relation(name: "UserLikes")
     author: User! @relation(name: "UserPosts")
 }

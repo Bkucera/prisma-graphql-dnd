@@ -8,8 +8,8 @@ type AuthPayload {
 
 type Mutation {
     # Custom resolvers
-    signup(email: String!, password: String!): AuthPayload!
-    login(email: String!, password: String!): AuthPayload!
+    # signup(email: String!, password: String!): AuthPayload!
+    # login(email: String!, password: String!): AuthPayload!
 
     # Generated resolvers, these are copied from the Prisma output by hand
     createUser(data: UserCreateInput!): User! @authenticated
