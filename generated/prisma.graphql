@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Mon Oct 08 2018 19:16:44 GMT-0400 (Eastern Daylight Time)
+# timestamp: Tue Oct 09 2018 19:47:49 GMT-0400 (Eastern Daylight Time)
 
 type AggregatePost {
   count: Int!

@@ -1,8 +1,13 @@
 {
     "defaultSeverity": "error",
     "jsRules": {},
+    "linterOptions": {
+        "exclude": [
+            "generated"
+        ]
+    },
     "rules": {
         "semicolon": [true, "never"]
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
 }
