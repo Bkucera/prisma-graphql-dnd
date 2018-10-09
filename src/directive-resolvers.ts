@@ -1,6 +1,9 @@
 import { Context } from "graphql-binding/dist/types"
-// import { SchemaDirectiveVisitor } from "graphql-tools"
-// import { GraphQLField, GraphQLInputField } from "graphql"
+import { SchemaDirectiveVisitor } from "graphql-tools"
+import { GraphQLField, GraphQLInputField } from "graphql"
+import Debug from 'debug'
+
+const debug = Debug('main')
 
 let fieldDefinitions = 0
 let inputFieldDefinitions = 0
@@ -16,7 +19,7 @@ const incrementInputFieldDefinition = ()=>{
 
 
 function getUserId (context:Context) {
-	return false
+	return context.req.session.user && context.req.session.user.id
 }
 
 // export class UserOwnsDirectiveResolver extends SchemaDirectiveVisitor {
@@ -41,7 +44,7 @@ function getUserId (context:Context) {
 // }
 
 export async function userOwnsDirectiveResolver(next, source, args, context) {
-	if (source[args.field] === await getUserId(context)) {
+	if (source[args.field] === getUserId(context)) {
 			return await next()
 	}
 	else {
@@ -59,6 +62,17 @@ export async function authenticatedDirectiveResolver(next, source, args, context
 	}
 }
 
+
+// export class PrivateDirectiveResolver extends SchemaDirectiveVisitor {
+// 	public visitFieldDefinition(field: GraphQLField<any, any>) {
+// 		debug('__visitFieldDefinition__')
+// 		const {resolve} = field
+// 		field.resolve = function(parent, args, context, info) {
+// 			debug('__resolvePrivate__')
+// 			return resolve.apply(this, arguments)
+// 		}
+// 	}
+// }
 
 export async function privateDirectiveResolver(next, source, args, context) {
 	console.log('___@private___')

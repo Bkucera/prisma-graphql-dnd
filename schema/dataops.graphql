@@ -2,8 +2,9 @@
 # This is where we define any custom resolvers, and where we add custom directives to any generated Prisma resolvers
 
 type AuthPayload {
-    token: String!
-    user: User!
+    email: String!
+    id: ID!
+    newSession: Boolean!
 }
 
 type Mutation {
@@ -13,4 +14,5 @@ type Mutation {
 
     # Generated resolvers, these are copied from the Prisma output by hand
     createUser(data: UserCreateInput!): User! @authenticated
+    login(email: String!, password: String!): AuthPayload!
 }
