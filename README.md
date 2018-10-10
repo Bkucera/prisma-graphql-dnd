@@ -34,3 +34,6 @@ npm run deploy
 
 **GraphQL Playground:** [`localhost:4000`](http://localhost:4000) 
 
+**I plan on abstracting most of this away in an npm package, to reduce cluttering repos looking to use this strategy**
+
+### want to improve it? PRs welcome!
