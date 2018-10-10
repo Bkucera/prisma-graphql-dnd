@@ -1,4 +1,4 @@
-## Prisma Directives N' Delegation
+## Prisma GraphQL Directives N' Delegation (dnd)
 
 ### Why?
 
