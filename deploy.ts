@@ -5,7 +5,7 @@ import chalk from 'chalk'
 const start = async () => {
 	const args = process.argv.slice(2)
 	const force = args[0] && /(-f|--force)/.test(args[0])
-	console.log('force?',force)
+
 	const deploy = execa('./node_modules/.bin/prisma',
 	['deploy', force?'--force':null],
 	 {stdio: 'inherit'}

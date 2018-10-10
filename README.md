@@ -16,8 +16,8 @@ This repo gives you the following:
 
 setup repo:
 ```sh
-git clone https://github.com/bkucera/prisma-dnd \
-cd prisma-dnd \
+git clone https://github.com/bkucera/prisma-graphql-dnd \
+cd prisma-graphql-dnd \
 npm install \
 ```
 
@@ -32,8 +32,5 @@ start prisma, generate schemas:
 npm run deploy
 ```
 
-open playground (graphql API explorer):
-```
-npm run playground
-```
+**GraphQL Playground:** [`localhost:4000`](http://localhost:4000) 
 
